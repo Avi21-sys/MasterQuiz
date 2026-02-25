@@ -1,0 +1,132 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+/* Background */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main Card */
+.quiz-container {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Heading */
+.quiz-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Info Bar */
+.quiz-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Timer */
+.timer {
+    background: #eef2ff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: #4f46e5;
+    font-weight: bold;
+}
+
+/* Question */
+.question {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #222;
+}
+
+/* Options */
+.options {
+    margin-bottom: 20px;
+}
+
+/* Option Button */
+.option-btn {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid #ddd;
+    background: #f9fafb;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.option-btn:hover {
+    background: #eef2ff;
+    border-color: #6366f1;
+}
+
+/* Correct & Wrong */
+.correct {
+    background: #22c55e !important;
+    color: white;
+    border-color: #22c55e;
+}
+
+.wrong {
+    background: #ef4444 !important;
+    color: white;
+    border-color: #ef4444;
+}
+
+/* Next Button */
+.next-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #6366f1;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.next-button:hover {
+    background: #4f46e5;
+}
+
+.next-button:disabled {
+    background: #c7d2fe;
+    cursor: not-allowed;
+}
+
+/* Result Page */
+.result-box {
+    text-align: center;
+}
+
+.result-box h1 {
+    margin-bottom: 15px;
+}
+
+.result-box p {
+    font-size: 22px;
+    margin: 15px 0;
+    font-weight: bold;
+}

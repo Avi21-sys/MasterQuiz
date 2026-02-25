@@ -15,6 +15,9 @@ public class Question {
 
     private String correctAnswer;
 
+    @Column(nullable = false)
+    private String category;
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Options> options;
 
@@ -48,5 +51,13 @@ public class Question {
 
     public void setOptions(List<Options> options) {
         this.options = options;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

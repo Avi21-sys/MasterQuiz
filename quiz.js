@@ -1,0 +1,175 @@
+const category = localStorage.getItem("quizCategory") || "JAVA";  //when nothing saved it saved java
+document.title = category + " QUIZ";
+document.querySelector("h1").innerText = category + " QUIZ";
+const API_URL = `http://localhost:8080/api/questions/${category}`;
+
+
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let timeLeft = 16;
+let timerInterval;
+
+
+// HTML Elements
+const questionText = document.getElementById("question-text");
+const optionsContainer = document.getElementById("options-container");
+const nextButton = document.getElementById("next-button");
+const timerEl = document.getElementById("timer");
+const currentQ = document.getElementById("current-question");
+const totalQ = document.getElementById("total-questions");
+
+
+// Load questions from backend
+async function loadQuestions() {
+    try {
+        const response = await fetch(API_URL);
+        questions = await response.json();
+
+        totalQ.innerText = questions.length;
+
+        showQuestion();
+        startTimer();
+
+    } catch (error) {
+        console.error("Error loading questions:", error);
+        questionText.innerText = "Failed to load questions!";
+    }
+}
+
+
+// Show current question
+function showQuestion() {
+
+    resetTimer();
+
+    const q = questions[currentIndex];
+
+    questionText.innerText = q.questionText;
+    currentQ.innerText = currentIndex + 1;
+
+    optionsContainer.innerHTML = "";
+    nextButton.disabled = true;
+
+    q.options.forEach(option => {
+
+        const btn = document.createElement("button");
+        btn.classList.add("option-btn");
+        btn.innerText = option;
+
+        btn.onclick = () => selectAnswer(btn, option);
+
+        optionsContainer.appendChild(btn);
+    });
+}
+
+
+// Select answer
+function selectAnswer(button, selectedAnswer) {
+
+    const correctAnswer = questions[currentIndex].correctAnswer;
+
+    const buttons = document.querySelectorAll(".option-btn");
+
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (selectedAnswer === correctAnswer) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+
+        // Show correct answer
+        buttons.forEach(btn => {
+            if (btn.innerText === correctAnswer) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+
+    nextButton.disabled = false;
+    clearInterval(timerInterval);
+}
+
+
+// Next question
+function nextQuestion() {
+
+    currentIndex++;
+
+    if (currentIndex < questions.length) {
+        showQuestion();
+        startTimer();
+    } else {
+        showResult();
+    }
+}
+
+
+function showResult() {
+
+    clearInterval(timerInterval);
+
+    document.querySelector(".quiz-container").innerHTML = `
+
+        <div class="result-box">
+
+            <h1>🎉 Quiz Completed</h1>
+
+            <p>Your Score</p>
+
+            <p>${score} / ${questions.length}</p>
+
+            <button class="next-button" onclick="location.reload()">
+                Restart Quiz
+            </button>
+
+        </div>
+
+    `;
+}
+
+
+// Timer
+function startTimer() {
+
+    timeLeft = 16;
+    timerEl.innerText = timeLeft;
+
+    timerInterval = setInterval(() => {
+
+        timeLeft--;
+        timerEl.innerText = timeLeft;
+
+        if (timeLeft === 0) {
+
+            clearInterval(timerInterval);
+            autoNext();
+
+        }
+
+    }, 1000);
+}
+
+
+// Reset timer
+function resetTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 16;
+    timerEl.innerText = timeLeft;
+}
+
+
+// Auto next if time over
+function autoNext() {
+
+    const buttons = document.querySelectorAll(".option-btn");
+
+    buttons.forEach(btn => btn.disabled = true);
+
+    nextButton.disabled = false;
+}
+
+
+// Start App
+loadQuestions();
