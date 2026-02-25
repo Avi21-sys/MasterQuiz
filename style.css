@@ -68,6 +68,7 @@ header section
     box-shadow: 0 0 10px black;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
 .main-nav a{
@@ -106,7 +107,10 @@ header section
 }
 
 .package-wrapper{
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
 }
 
 
@@ -124,26 +128,57 @@ header section
     margin: 10px;
 }
 
+.package-card {
+    width: 260px;
+    min-height: 420px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s ease;
+}
+
 .package-card img{
     width: 100%;
-    height: 200px;
-    border-radius: 5px;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
-.package-card .card-heading{
-    font-size: 25px;
+.package-card .card-heading:last-of-type {
+    font-size: 22px;
+    font-weight: bold;
+    color: #222;
+    margin: 5px 0;
 }
 
-.package-card .card-text{
-    font-size: 20px;
-    color: gray;
+
+.card-text {
+    min-height: 90px;
+    font-size: 15px;
+    color: #666;
+    line-height: 1.4;
 }
 
 .package-card .btn{
     border-radius: 40px;
     box-shadow: 0 0 5px gray;
     border: none;
-    margin-bottom: 10px;
+    margin: 10px auto 0;
+    padding: 8px 18px;
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+.package-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
 }
 
 .package-card .btn:hover{
@@ -152,10 +187,19 @@ header section
 
 .Performer-quiz-section{
     text-align: center;
+   
 }
 
 .Performer-quiz-section .quiz-heading{
     padding-top: 60px;
+    
+}
+
+.Performer-quiz-section .quiz-text {
+    color: #bfbebe;
+    font-size: 25px;
+    text-align: center;
+    padding: 0px 40px;
 }
 
 .Performer-quiz-section .image-card{
@@ -176,6 +220,7 @@ header section
     border-radius: 10px;
     object-fit: cover;
     transition: transform 0.3s ease, box-shadow 0.3s ease;  /*adds smooth transition*/
+   
 }
 
 .image-card img:hover{
