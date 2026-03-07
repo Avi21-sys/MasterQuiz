@@ -1,3 +1,9 @@
+const username = localStorage.getItem("username");
+
+if(!username){
+    window.location.href = "login.html";
+}
+
 const category = localStorage.getItem("quizCategory") || "JAVA";  //when nothing saved it saved java
 document.title = category + " QUIZ";
 document.querySelector("h1").innerText = category + " QUIZ";
@@ -110,6 +116,20 @@ function showResult() {
 
     clearInterval(timerInterval);
 
+    // Save result to backend
+    fetch("http://localhost:8080/api/results/save", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username: username,
+            quizType: category,
+            score: score,
+            totalQuestions: questions.length
+        })
+    });
+
     document.querySelector(".quiz-container").innerHTML = `
 
         <div class="result-box">
@@ -169,7 +189,6 @@ function autoNext() {
 
     nextButton.disabled = false;
 }
-
 
 // Start App
 loadQuestions();
