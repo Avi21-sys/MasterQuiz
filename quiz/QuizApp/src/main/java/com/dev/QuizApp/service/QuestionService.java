@@ -34,7 +34,7 @@ public class QuestionService {
 
     public List<QuestionDTO> getQuestionsByCategory(String category){
 
-        return questionRepo.findByCategory(category)
+        return questionRepo.findRandomByCategory(category)
                 .stream()
                 .map(q -> {
 
