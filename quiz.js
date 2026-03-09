@@ -24,6 +24,7 @@ const nextButton = document.getElementById("next-button");
 const timerEl = document.getElementById("timer");
 const currentQ = document.getElementById("current-question");
 const totalQ = document.getElementById("total-questions");
+const progress = document.getElementById("progress");
 
 
 // Load questions from backend
@@ -53,6 +54,9 @@ function showQuestion() {
 
     questionText.innerText = q.questionText;
     currentQ.innerText = currentIndex + 1;
+
+    const progressPercent = ((currentIndex + 1) / questions.length) * 100;
+    progress.style.width = progressPercent + "%";
 
     optionsContainer.innerHTML = "";
     nextButton.disabled = true;
