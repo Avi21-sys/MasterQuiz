@@ -25,6 +25,7 @@ const timerEl = document.getElementById("timer");
 const currentQ = document.getElementById("current-question");
 const totalQ = document.getElementById("total-questions");
 const progress = document.getElementById("progress");
+const timerCircle = document.getElementById("timer-progress");
 
 
 // Load questions from backend
@@ -155,24 +156,28 @@ function showResult() {
 
 
 // Timer
-function startTimer() {
+function startTimer(){
 
     timeLeft = 16;
     timerEl.innerText = timeLeft;
 
+    const circumference = 188;
+
     timerInterval = setInterval(() => {
 
         timeLeft--;
+
         timerEl.innerText = timeLeft;
 
-        if (timeLeft === 0) {
+        const offset = circumference - (timeLeft / 16) * circumference;
+        timerCircle.style.strokeDashoffset = offset;
 
+        if(timeLeft === 0){
             clearInterval(timerInterval);
             autoNext();
-
         }
 
-    }, 1000);
+    },1000);
 }
 
 
@@ -181,6 +186,7 @@ function resetTimer() {
     clearInterval(timerInterval);
     timeLeft = 16;
     timerEl.innerText = timeLeft;
+    timerCircle.style.strokeDashoffset = 0;
 }
 
 

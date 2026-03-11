@@ -41,13 +41,28 @@ body {
     color: #555;
 }
 
-/* Timer */
-.timer {
-    background: #eef2ff;
-    padding: 5px 10px;
-    border-radius: 6px;
-    color: #4f46e5;
-    font-weight: bold;
+/* Timer circle*/
+.timer-circle{
+    position: relative;
+    width:70px;
+    height:70px;
+}
+
+.timer-circle svg{
+    transform: rotate(-90deg);
+}
+
+#timer{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    font-weight:bold;
+    font-size:18px;
+}
+
+#timer-progress{
+    transition: stroke-dashoffset 1s linear;
 }
 
 /*Progress Bar*/
