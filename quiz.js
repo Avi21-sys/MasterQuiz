@@ -78,7 +78,10 @@ function showQuestion() {
 // Select answer
 function selectAnswer(button, selectedAnswer) {
 
-    const correctAnswer = questions[currentIndex].correctAnswer;
+    clearInterval(timerInterval); // stop timer
+
+    const currentQData = questions[currentIndex]; 
+    const correctAnswer = currentQData.correctAnswer;
 
     const buttons = document.querySelectorAll(".option-btn");
 
@@ -98,8 +101,22 @@ function selectAnswer(button, selectedAnswer) {
         });
     }
 
+    // SHOW EXPLANATION
+    const explanationBox = document.createElement("div");
+    explanationBox.classList.add("explanation-box");
+
+    explanationBox.innerHTML = `
+        <p><strong>Correct Answer:</strong> ${correctAnswer}</p>
+        <p><strong>Explanation:</strong> ${currentQData.explanation}</p>
+    `;
+
+    optionsContainer.appendChild(explanationBox);
+
+    // ENABLE NEXT BUTTON
     nextButton.disabled = false;
-    clearInterval(timerInterval);
+
+    console.log("Answer clicked");
+    console.log("Button enabled:", nextButton.disabled);
 }
 
 

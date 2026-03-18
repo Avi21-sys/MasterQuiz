@@ -18,6 +18,9 @@ public class Question {
     @Column(nullable = false)
     private String category;
 
+    @Column(name = "explanation")
+    private String explanation;
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Options> options;
 
@@ -59,5 +62,13 @@ public class Question {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
     }
 }

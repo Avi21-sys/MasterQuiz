@@ -43,6 +43,7 @@ public class QuestionService {
                     dto.setId(q.getQuestionId());
                     dto.setQuestionText(q.getQuestionText());
                     dto.setCorrectAnswer(q.getCorrectAnswer());
+                    dto.setExplanation(q.getExplanation());
 
                     List<String> optionList = q.getOptions()
                             .stream()

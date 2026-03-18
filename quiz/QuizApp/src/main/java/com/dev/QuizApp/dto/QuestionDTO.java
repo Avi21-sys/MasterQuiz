@@ -7,6 +7,7 @@ public class QuestionDTO {
     private Long id;
     private String questionText;
     private String correctAnswer;
+    private String explanation;
 
 
     private List<String> options;
@@ -44,5 +45,13 @@ public class QuestionDTO {
 
     public void setOptions(List<String> options) {
         this.options = options;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
     }
 }
