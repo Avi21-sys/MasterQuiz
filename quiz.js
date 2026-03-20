@@ -16,6 +16,8 @@ let score = 0;
 let timeLeft = 16;
 let timerInterval;
 
+const correctSound = new Audio("sound/correct.mp3");
+const wrongSound = new Audio("sound/wrong.mp3");
 
 // HTML Elements
 const questionText = document.getElementById("question-text");
@@ -90,8 +92,10 @@ function selectAnswer(button, selectedAnswer) {
     if (selectedAnswer === correctAnswer) {
         button.classList.add("correct");
         score++;
+        correctSound.play();        // Sound
     } else {
         button.classList.add("wrong");
+        wrongSound.play();
 
         // Show correct answer
         buttons.forEach(btn => {
