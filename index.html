@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>
+        if (!localStorage.getItem("username")) {
+            window.location.replace("login.html");
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -28,6 +33,7 @@
     <nav class="main-nav">
         <a href="#">Home</a>
         <a href="#quiz-packages">Quiz</a>
+        <a href="leaderboard.html">Leaderboard</a>
         <a href="#Performer">Top Performers</a>
         <a href="#notes">Notes</a>
     </nav>
@@ -50,7 +56,7 @@
                     Practice core Java concepts including OOP, data types, exception handling, 
                     and collections through carefully designed quiz questions.
                 </p>
-                <p class="card-heading">₹500</p>
+                <p class="card-heading">Rs. 500</p>
                 <button class="btn" onclick="startQuiz('JAVA')">Take Quiz</button>
             </div>
 
@@ -62,7 +68,7 @@
                     Enhance your Python knowledge by solving questions on syntax, data structures, 
                     functions, and real-world programming concepts.
                 </p>
-                <p class="card-heading">₹400</p>
+                <p class="card-heading">Rs. 400</p>
                 <button class="btn" onclick="startQuiz('PYTHON')">Take Quiz</button>
             </div>
 
@@ -74,7 +80,7 @@
                     Test your understanding of JavaScript fundamentals, DOM manipulation, events,
                      and modern ES6 features.
                 </p>
-                <p class="card-heading">₹200</p>
+                <p class="card-heading">Rs. 200</p>
                 <button class="btn" onclick="startQuiz('JS')">Take Quiz</button>
             </div>
 
@@ -86,7 +92,7 @@
                     Strengthen your .NET skills with quizzes on C#, ASP.NET, object-oriented programming, 
                     and application development.
                 </p>
-                <p class="card-heading">₹300</p>
+                <p class="card-heading">Rs. 300</p>
                 <button class="btn" onclick="startQuiz('DOTNET')">Take Quiz</button>
             </div>
 
@@ -100,13 +106,17 @@
             Our top performers are the brightest minds who have consistently excelled.
         </p>
 
-        <div class="image-card">
-            <img src="./images/m1.png" alt="">
-            <img src="./images/m2.png" alt="">
-            <img src="./images/m3.png" alt="">
-            <img src="./images/m4.png" alt="">
-            <img src="./images/m5.png" alt="">
-            <img src="./images/m6.png" alt="">
+        <div class="top-performer-toolbar">
+            <span id="top-performer-status">Loading live performers...</span>
+            <label class="photo-upload-control">
+                Upload your photo
+                <input type="file" id="profile-photo-input" accept="image/*">
+            </label>
+            <a href="leaderboard.html" class="performer-link">View full leaderboard</a>
+        </div>
+
+        <div class="image-card top-performer-grid" id="top-performer-grid">
+            <div class="performer-empty">Loading top performers...</div>
         </div>
     </section>
 

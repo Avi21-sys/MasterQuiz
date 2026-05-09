@@ -206,26 +206,135 @@ header section
     object-fit: cover;
 }
 
+.top-performer-toolbar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+    color: #555;
+    font-size: 16px;
+}
+
+.performer-link{
+    color: teal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.performer-link:hover{
+    text-decoration: underline;
+}
+
+.photo-upload-control{
+    background: teal;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 9px 14px;
+}
+
+.photo-upload-control:hover{
+    background: #056b6b;
+}
+
+.photo-upload-control input{
+    display: none;
+}
+
 .image-card{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-    padding: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    padding: 20px;
     margin-top: 20px;
 }
 
-.image-card img{
-    width: 100%;
-    height: 400px;
-    border-radius: 10px;
-    object-fit: cover;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;  /*adds smooth transition*/
-   
+.performer-card{
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.14);
+    overflow: hidden;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.image-card img:hover{
-    transform: scale(1.1); /*scales image up on hover*/
-    box-shadow: 0 10px 15px rgba(0,0,0,0.2); /*adds shadow effect on hover*/
+.performer-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 12px 22px rgba(0,0,0,0.18);
+}
+
+.performer-photo-wrap{
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.performer-photo-wrap img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.performer-card:hover .performer-photo-wrap img{
+    transform: scale(1.06);
+}
+
+.performer-rank{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: teal;
+    color: white;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(0,0,0,0.25);
+}
+
+.performer-details{
+    padding: 14px;
+}
+
+.performer-details h3{
+    color: #222;
+    font-size: 22px;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.performer-details p{
+    color: #777;
+    margin-bottom: 12px;
+}
+
+.performer-stats{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.performer-stats span{
+    background: #f1f7f7;
+    border-radius: 6px;
+    color: #164646;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 6px;
+    text-align: center;
+}
+
+.performer-empty{
+    grid-column: 1 / -1;
+    color: #777;
+    font-size: 18px;
+    padding: 30px;
+    text-align: center;
 }
 
 .notes-section{

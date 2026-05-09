@@ -15,6 +15,7 @@ let currentIndex = 0;
 let score = 0;
 let timeLeft = 16;
 let timerInterval;
+let quizStartTime = Date.now();
 
 const correctSound = new Audio("sound/correct.mp3");
 const wrongSound = new Audio("sound/wrong.mp3");
@@ -33,6 +34,7 @@ const timerCircle = document.getElementById("timer-progress");
 // Load questions from backend
 async function loadQuestions() {
     try {
+        quizStartTime = Date.now();
         const response = await fetch(API_URL);
         questions = await response.json();
 
@@ -141,6 +143,7 @@ function nextQuestion() {
 function showResult() {
 
     clearInterval(timerInterval);
+    const completionTimeSeconds = Math.floor((Date.now() - quizStartTime) / 1000);
 
     // Save result to backend
     fetch("http://localhost:8080/api/results/save", {
@@ -152,7 +155,8 @@ function showResult() {
             username: username,
             quizType: category,
             score: score,
-            totalQuestions: questions.length
+            totalQuestions: questions.length,
+            completionTimeSeconds: completionTimeSeconds
         })
     });
 
@@ -167,19 +171,35 @@ function showResult() {
 
         <div class="result-box">
 
-            <h1>🎉 Quiz Completed</h1>
+            <h1>Quiz Completed</h1>
 
             <p>Your Score</p>
 
             <p>${score} / ${questions.length}</p>
 
+            <p>Time Taken: ${formatTime(completionTimeSeconds)}</p>
+
             <button class="next-button" onclick="location.reload()">
                 Restart Quiz
+            </button>
+
+            <button class="next-button" onclick="window.location.href='leaderboard.html'">
+                View Leaderboard
             </button>
 
         </div>
 
     `;
+}
+
+function formatTime(seconds) {
+    if (seconds < 60) {
+        return `${seconds}s`;
+    }
+
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
 }
 
 

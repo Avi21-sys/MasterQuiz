@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Leaderboard</title>
+    <script>
+        if (!localStorage.getItem("username")) {
+            window.location.replace("login.html");
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="leaderboard.css">
+</head>
+<body>
+    <div class="leaderboard-container">
+        <header class="leaderboard-header">
+            <h1>Quiz Leaderboard</h1>
+            <p>Track your ranking and compete with others</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="top-scores">Top Scores</button>
+            <button class="tab-btn" data-tab="accuracy">Highest Accuracy</button>
+            <button class="tab-btn" data-tab="fastest">Fastest Completion</button>
+            <button class="tab-btn" data-tab="weekly">Weekly Rankings</button>
+            <button class="tab-btn" data-tab="personal">Personal Stats</button>
+        </div>
+
+        <!-- Category Selector -->
+        <div class="category-selector">
+            <label for="category-select">Select Category:</label>
+            <select id="category-select">
+                <option value="JAVA">Java</option>
+                <option value="PYTHON">Python</option>
+                <option value="JS">JavaScript</option>
+                <option value="DOTNET">.NET</option>
+            </select>
+        </div>
+
+        <!-- Top Scores Tab -->
+        <div id="top-scores" class="tab-content active">
+            <div class="leaderboard-card">
+                <h2>Top Scores</h2>
+                <div id="top-scores-content" class="leaderboard-table-container">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accuracy Tab -->
+        <div id="accuracy" class="tab-content">
+            <div class="leaderboard-card">
+                <h2>Highest Accuracy</h2>
+                <div id="accuracy-content" class="leaderboard-table-container">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fastest Completion Tab -->
+        <div id="fastest" class="tab-content">
+            <div class="leaderboard-card">
+                <h2>Fastest Completion Time</h2>
+                <div id="fastest-content" class="leaderboard-table-container">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Tab -->
+        <div id="weekly" class="tab-content">
+            <div class="leaderboard-card">
+                <h2>Weekly Rankings (Last 7 Days)</h2>
+                <div id="weekly-content" class="leaderboard-table-container">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Stats Tab -->
+        <div id="personal" class="tab-content">
+            <div class="leaderboard-card">
+                <h2>Your Personal Statistics</h2>
+                <div class="personal-stats-container">
+                    <div class="username-input-group">
+                        <input type="text" id="username-input" placeholder="Enter your username">
+                        <button onclick="loadPersonalStats()">Get Stats</button>
+                    </div>
+                    <div id="personal-stats-content">
+                        <p class="info-text">Enter your username to view your statistics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="leaderboard-footer">
+            <p>Last updated: <span id="last-updated">-</span></p>
+            <p><small>Refresh the page to get the latest rankings</small></p>
+        </footer>
+    </div>
+
+    <script src="leaderboard.js"></script>
+</body>
+</html>
+
