@@ -9,6 +9,37 @@ document.title = category + " QUIZ";
 document.querySelector("h1").innerText = category + " QUIZ";
 const API_URL = `http://localhost:8080/api/questions/${category}`;
 
+// Helper function to get authorization headers
+function getAuthHeaders() {
+    const token = localStorage.getItem("token");
+    return {
+        "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+    };
+}
+
+function redirectToLogin() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
+}
+
+async function fetchWithAuth(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...getAuthHeaders(),
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        redirectToLogin();
+        throw new Error("Authentication required");
+    }
+
+    return response;
+}
 
 let questions = [];
 let currentIndex = 0;
@@ -35,7 +66,7 @@ const timerCircle = document.getElementById("timer-progress");
 async function loadQuestions() {
     try {
         quizStartTime = Date.now();
-        const response = await fetch(API_URL);
+        const response = await fetchWithAuth(API_URL);
         questions = await response.json();
 
         totalQ.innerText = questions.length;
@@ -146,11 +177,8 @@ function showResult() {
     const completionTimeSeconds = Math.floor((Date.now() - quizStartTime) / 1000);
 
     // Save result to backend
-    fetch("http://localhost:8080/api/results/save", {
+    fetchWithAuth("http://localhost:8080/api/results/save", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
         body: JSON.stringify({
             username: username,
             quizType: category,

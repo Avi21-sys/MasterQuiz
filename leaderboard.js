@@ -5,6 +5,38 @@ if (!localStorage.getItem('username')) {
     window.location.replace('login.html');
 }
 
+// Helper function to get authorization headers
+function getAuthHeaders() {
+    const token = localStorage.getItem("token");
+    return {
+        "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+    };
+}
+
+function redirectToLogin() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+}
+
+async function fetchWithAuth(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...getAuthHeaders(),
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        redirectToLogin();
+        throw new Error('Authentication required');
+    }
+
+    return response;
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     setupTabNavigation();
@@ -85,7 +117,7 @@ function loadTopScores() {
     const category = document.getElementById('category-select').value;
     const contentDiv = document.getElementById('top-scores-content');
 
-    fetch(`${API_BASE_URL}/top-scores/${category}?limit=15`)
+    fetchWithAuth(`${API_BASE_URL}/top-scores/${category}?limit=15`)
         .then(response => response.json())
         .then(data => {
             if (data.topScores && data.topScores.length > 0) {
@@ -108,7 +140,7 @@ function loadHighestAccuracy() {
     const category = document.getElementById('category-select').value;
     const contentDiv = document.getElementById('accuracy-content');
 
-    fetch(`${API_BASE_URL}/highest-accuracy/${category}?limit=15`)
+    fetchWithAuth(`${API_BASE_URL}/highest-accuracy/${category}?limit=15`)
         .then(response => response.json())
         .then(data => {
             if (data.highestAccuracy && data.highestAccuracy.length > 0) {
@@ -131,7 +163,7 @@ function loadFastestCompletion() {
     const category = document.getElementById('category-select').value;
     const contentDiv = document.getElementById('fastest-content');
 
-    fetch(`${API_BASE_URL}/fastest-completion/${category}?limit=15`)
+    fetchWithAuth(`${API_BASE_URL}/fastest-completion/${category}?limit=15`)
         .then(response => response.json())
         .then(data => {
             if (data.fastestCompletion && data.fastestCompletion.length > 0) {
@@ -154,7 +186,7 @@ function loadWeeklyLeaderboard() {
     const category = document.getElementById('category-select').value;
     const contentDiv = document.getElementById('weekly-content');
 
-    fetch(`${API_BASE_URL}/weekly/${category}?limit=15`)
+    fetchWithAuth(`${API_BASE_URL}/weekly/${category}?limit=15`)
         .then(response => response.json())
         .then(data => {
             if (data.weeklyTopScores && data.weeklyTopScores.length > 0) {
@@ -185,7 +217,7 @@ function loadPersonalStats() {
     const contentDiv = document.getElementById('personal-stats-content');
     contentDiv.innerHTML = '<div class="loading">Loading...</div>';
 
-    fetch(`${API_BASE_URL}/stats/${username}/${category}`)
+    fetchWithAuth(`${API_BASE_URL}/stats/${username}/${category}`)
         .then(response => response.json())
         .then(data => {
             contentDiv.innerHTML = createPersonalStatsView(data);

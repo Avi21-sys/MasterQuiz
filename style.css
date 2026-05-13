@@ -253,6 +253,10 @@ header section
     margin-top: 20px;
 }
 
+.top-performer-grid{
+    grid-template-columns: repeat(6, minmax(180px, 1fr));
+}
+
 .performer-card{
     background: #fff;
     border-radius: 8px;

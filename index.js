@@ -26,6 +26,38 @@ const TOP_PERFORMER_IMAGES = [
     "./images/m6.png"
 ];
 
+// Helper function to get authorization headers
+function getAuthHeaders() {
+    const token = localStorage.getItem("token");
+    return {
+        "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+    };
+}
+
+function redirectToLogin() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
+}
+
+async function fetchWithAuth(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...getAuthHeaders(),
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        redirectToLogin();
+        throw new Error("Authentication required");
+    }
+
+    return response;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     setupProfilePhotoUpload();
     loadTopPerformers();
@@ -71,8 +103,12 @@ async function uploadProfilePhoto(username, file) {
     formData.append("username", username);
     formData.append("photo", file);
 
+    const token = localStorage.getItem("token");
+    const headers = token ? { "Authorization": `Bearer ${token}` } : {};
+
     const response = await fetch(`${PROFILE_API_URL}/photo`, {
         method: "POST",
+        headers: headers,
         body: formData
     });
 
@@ -94,7 +130,7 @@ async function loadTopPerformers() {
     try {
         const responses = await Promise.all(
             TOP_PERFORMER_CATEGORIES.map(category =>
-                fetch(`${LEADERBOARD_API_URL}/top-scores/${category}?limit=6`)
+                fetchWithAuth(`${LEADERBOARD_API_URL}/top-scores/${category}?limit=6`)
                     .then(response => response.ok ? response.json() : Promise.reject(response))
                     .then(data => (data.topScores || []).map(entry => ({
                         ...entry,

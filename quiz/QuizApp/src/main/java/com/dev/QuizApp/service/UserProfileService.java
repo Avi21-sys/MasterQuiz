@@ -2,7 +2,7 @@ package com.dev.QuizApp.service;
 
 import com.dev.QuizApp.entity.UserProfile;
 import com.dev.QuizApp.repository.UserProfileRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +22,29 @@ public class UserProfileService {
 
     private static final Path PROFILE_PHOTO_DIR = Path.of("uploads", "profile-photos");
 
-    @Autowired
-    private UserProfileRepo userProfileRepo;
+    private final UserProfileRepo userProfileRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserProfileService(UserProfileRepo userProfileRepo, PasswordEncoder passwordEncoder) {
+        this.userProfileRepo = userProfileRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public UserProfile findByUsername(String username) {
+        return userProfileRepo.findByUsername(username).orElse(null);
+    }
+
+    public UserProfile createUser(String username, String rawPassword) {
+        if (userProfileRepo.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        UserProfile user = new UserProfile();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        return userProfileRepo.save(user);
+    }
+
 
     public UserProfile saveProfilePhoto(String username, MultipartFile photo) throws IOException {
         if (username == null || username.isBlank()) {
@@ -48,8 +69,7 @@ public class UserProfileService {
         Files.copy(photo.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         UserProfile profile = userProfileRepo.findByUsername(username)
-                .orElseGet(UserProfile::new);
-        profile.setUsername(username);
+                .orElseThrow(() -> new IllegalArgumentException("Please register or log in before uploading a photo"));
         profile.setPhotoUrl("/uploads/profile-photos/" + filename);
 
         return userProfileRepo.save(profile);
@@ -59,7 +79,7 @@ public class UserProfileService {
         return userProfileRepo.findByUsername(username).orElseGet(() -> {
             UserProfile profile = new UserProfile();
             profile.setUsername(username);
-            return userProfileRepo.save(profile);
+            return profile;
         });
     }
 
