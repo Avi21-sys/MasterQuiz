@@ -1,5 +1,6 @@
 package com.dev.QuizApp.service;
 
+import com.dev.QuizApp.entity.Role;
 import com.dev.QuizApp.entity.UserProfile;
 import com.dev.QuizApp.repository.UserProfileRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,10 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,7 +32,13 @@ public class UserProfileService {
         return userProfileRepo.findByUsername(username).orElse(null);
     }
 
+    /** Register a new USER (default role) */
     public UserProfile createUser(String username, String rawPassword) {
+        return createUser(username, rawPassword, Role.USER);
+    }
+
+    /** Register with an explicit role (used by admin-seeding / admin panel) */
+    public UserProfile createUser(String username, String rawPassword, Role role) {
         if (userProfileRepo.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
@@ -42,9 +46,37 @@ public class UserProfileService {
         UserProfile user = new UserProfile();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setRole(role);
         return userProfileRepo.save(user);
     }
 
+    /** Promote an existing user to ADMIN */
+    public UserProfile promoteToAdmin(String username) {
+        UserProfile user = userProfileRepo.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+        user.setRole(Role.ADMIN);
+        return userProfileRepo.save(user);
+    }
+
+    /** Demote an ADMIN back to USER */
+    public UserProfile demoteToUser(String username) {
+        UserProfile user = userProfileRepo.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+        user.setRole(Role.USER);
+        return userProfileRepo.save(user);
+    }
+
+    /** Delete a user account (admin operation) */
+    public void deleteUser(String username) {
+        UserProfile user = userProfileRepo.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+        userProfileRepo.delete(user);
+    }
+
+    /** List all users (admin operation) */
+    public List<UserProfile> getAllUsers() {
+        return userProfileRepo.findAll();
+    }
 
     public UserProfile saveProfilePhoto(String username, MultipartFile photo) throws IOException {
         if (username == null || username.isBlank()) {
@@ -94,16 +126,9 @@ public class UserProfileService {
     }
 
     private String getFileExtension(String originalFilename) {
-        if (originalFilename == null) {
-            return ".jpg";
-        }
-
+        if (originalFilename == null) return ".jpg";
         int dotIndex = originalFilename.lastIndexOf('.');
-        if (dotIndex < 0) {
-            return ".jpg";
-        }
-
-        return originalFilename.substring(dotIndex).toLowerCase();
+        return dotIndex < 0 ? ".jpg" : originalFilename.substring(dotIndex).toLowerCase();
     }
 
     private String sanitize(String value) {

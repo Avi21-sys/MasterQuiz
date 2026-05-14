@@ -21,7 +21,7 @@ public class Question {
     @Column(name = "explanation")
     private String explanation;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Options> options;
 
     public Long getQuestionId() {

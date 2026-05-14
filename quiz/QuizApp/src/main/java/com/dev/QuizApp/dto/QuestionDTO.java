@@ -5,8 +5,10 @@ import java.util.List;
 public class QuestionDTO {
 
     private Long id;
+    private Long questionId;
     private String questionText;
     private String correctAnswer;
+    private String category;
     private String explanation;
 
 
@@ -20,6 +22,14 @@ public class QuestionDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
     public String getQuestionText() {
@@ -36,6 +46,14 @@ public class QuestionDTO {
 
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 

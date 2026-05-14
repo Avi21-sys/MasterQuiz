@@ -1,10 +1,6 @@
 package com.dev.QuizApp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class UserProfile {
@@ -16,8 +12,14 @@ public class UserProfile {
     @Column(nullable = false, unique = true)
     private String username;
 
+    private String photoUrl;
+
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;  // Default role is USER
 
     public String getPassword() {
         return password;
@@ -27,7 +29,6 @@ public class UserProfile {
         this.password = password;
     }
 
-    private String photoUrl;
 
     public Long getId() {
         return id;
@@ -51,5 +52,13 @@ public class UserProfile {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

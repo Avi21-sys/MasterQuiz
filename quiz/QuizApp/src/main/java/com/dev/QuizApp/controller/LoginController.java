@@ -2,6 +2,7 @@ package com.dev.QuizApp.controller;
 
 import com.dev.QuizApp.dto.LoginRequest;
 import com.dev.QuizApp.dto.QuestionDTO;
+import com.dev.QuizApp.entity.UserProfile;
 import com.dev.QuizApp.security.JwtUtil;
 import com.dev.QuizApp.service.QuestionService;
 import com.dev.QuizApp.service.UserProfileService;
@@ -49,9 +50,14 @@ public class LoginController {
             // Generate JWT token
             String token = jwtUtil.generateToken(loginRequest.getUsername());
 
+            // Fetch the profile so we can return the role to the frontend
+            UserProfile profile = userProfileService.findByUsername(loginRequest.getUsername());
+            String role = profile != null ? profile.getRole().name() : "USER";
+
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("username", loginRequest.getUsername());
+            response.put("role", role);          // ← NEW: expose role
             response.put("message", "Login successful");
 
             return ResponseEntity.ok(response);

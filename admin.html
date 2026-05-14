@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel – Master Quiz</title>
+    <script>
+        // Guard: only ADMINs allowed
+        const role = localStorage.getItem("role");
+        const token = localStorage.getItem("token");
+        if (!token || role !== "ADMIN") {
+            window.location.replace("login.html");
+        }
+    </script>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ── Sidebar ────────────────────────────────────────────────── -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <span class="brand-icon">⚙️</span>
+        <span>Admin Panel</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <button class="nav-btn active" onclick="showSection('questions')">
+            📝 Questions
+        </button>
+        <button class="nav-btn" onclick="showSection('users')">
+            👥 Users
+        </button>
+    </nav>
+
+    <div class="sidebar-footer">
+        <span id="admin-name"></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <a href="index.html" class="home-link">← User Home</a>
+    </div>
+</aside>
+
+<!-- ── Main content ───────────────────────────────────────────── -->
+<main class="main-content">
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- ══════════════ QUESTIONS SECTION ══════════════ -->
+    <section id="section-questions" class="section active">
+        <div class="section-header">
+            <h1>Question Management</h1>
+            <button class="btn btn-primary" onclick="openModal('add')">+ Add Question</button>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+            <label>Category:
+                <select id="q-filter-category" onchange="loadQuestions()">
+                    <option value="ALL">All</option>
+                    <option value="JAVA">Java</option>
+                    <option value="PYTHON">Python</option>
+                    <option value="JS">JavaScript</option>
+                    <option value="DOTNET">.NET</option>
+                </select>
+            </label>
+            <input type="text" id="q-search" placeholder="Search questions…"
+                   oninput="filterTable()" class="search-input">
+        </div>
+
+        <div class="table-wrap">
+            <table id="questions-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Question</th>
+                        <th>Correct Answer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="questions-tbody">
+                    <tr><td colspan="5" class="loading-cell">Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══════════════ USERS SECTION ══════════════ -->
+    <section id="section-users" class="section">
+        <div class="section-header">
+            <h1>User Management</h1>
+        </div>
+
+        <div class="filter-bar">
+            <input type="text" id="u-search" placeholder="Search users…"
+                   oninput="filterUsers()" class="search-input">
+        </div>
+
+        <div class="table-wrap">
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody">
+                    <tr><td colspan="4" class="loading-cell">Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<!-- ══════════════ ADD / EDIT QUESTION MODAL ══════════════ -->
+<div id="question-modal" class="modal-overlay hidden">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-title">Add Question</h2>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <input type="hidden" id="edit-id">
+
+            <label>Category
+                <select id="modal-category">
+                    <option value="JAVA">Java</option>
+                    <option value="PYTHON">Python</option>
+                    <option value="JS">JavaScript</option>
+                    <option value="DOTNET">.NET</option>
+                </select>
+            </label>
+
+            <label>Question Text
+                <textarea id="modal-question" rows="3" placeholder="Enter question…"></textarea>
+            </label>
+
+            <label>Options (one per line – list all choices)
+                <textarea id="modal-options" rows="4"
+                    placeholder="Option A&#10;Option B&#10;Option C&#10;Option D"></textarea>
+            </label>
+
+            <label>Correct Answer
+                <input type="text" id="modal-answer" placeholder="Must match one option exactly">
+            </label>
+
+            <label>Explanation
+                <textarea id="modal-explanation" rows="2" placeholder="Explain the correct answer…"></textarea>
+            </label>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary"   onclick="saveQuestion()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════ CONFIRM DELETE MODAL ══════════════ -->
+<div id="confirm-modal" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Confirm Delete</h2>
+        </div>
+        <div class="modal-body">
+            <p id="confirm-text">Are you sure?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+            <button class="btn btn-danger"    onclick="confirmAction()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
