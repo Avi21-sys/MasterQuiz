@@ -133,4 +133,4 @@ Register a new user, log in, pick a category, and start the quiz!
 
 ## 📄 License
 
-All rights reserved (update this section if you intend to open-source under a specific license, e.g. MIT).
+All rights reserved.
